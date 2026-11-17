@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+
 using Food_Menu_Management_System.Data;
 using Food_Menu_Management_System.Repositories;
 using Food_Menu_Management_System.Services;
@@ -15,33 +16,56 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 3. Register Repository Dependency Injection
+// 3. Register Food Item Repository
 builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
 
-// 4. Register Service Dependency Injection
+// 4. Register Food Item Service
 builder.Services.AddScoped<IFoodItemService, FoodItemService>();
 
-// 5. Configure Swagger
+// 5. Register Category Repository
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+// 6. Register Category Service
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+// 7. Configure CORS for Angular Frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+// 8. Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// 6. Register Global Exception Middleware
+// 9. Register Global Exception Middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
-// 7. Configure Swagger UI
+// 10. Configure Swagger UI
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// 8. Configure HTTPS
+// 11. Configure HTTPS
 app.UseHttpsRedirection();
 
-// 9. Map Controller Endpoints
+// 12. Enable CORS
+app.UseCors("AllowAngular");
+
+// 13. Configure Authorization
+app.UseAuthorization();
+
+// 14. Map Controller Endpoints
 app.MapControllers();
 
-// 10. Start Application
+// 15. Start Application
 app.Run();

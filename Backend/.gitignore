@@ -1,4 +1,3 @@
-@'
 **/.vs/
 **/bin/
 **/obj/
@@ -9,4 +8,3 @@ TestResults/
 node_modules/
 .angular/
 dist/
-'@ | Set-Content -Encoding utf8 .gitignore
