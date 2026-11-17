@@ -1,0 +1,12 @@
+@'
+**/.vs/
+**/bin/
+**/obj/
+*.user
+*.suo
+*.log
+TestResults/
+node_modules/
+.angular/
+dist/
+'@ | Set-Content -Encoding utf8 .gitignore
